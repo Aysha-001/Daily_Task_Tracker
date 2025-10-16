@@ -338,7 +338,7 @@
             <h1>Task Manager</h1>
             <p class="subtitle">Organize your tasks efficiently</p>
         </header>
-
+<!-- Add Task Form Section -->
         <section class="add-task-form">
             <form action="/add" method="POST">
                 <div class="form-group">
@@ -354,7 +354,7 @@
                 </div>
             </form>
         </section>
-
+<!-- Task Lists Section -->
         <section class="task-lists">
             <div class="task-section">
                 <div class="section-header">
@@ -395,7 +395,7 @@
                     {% endif %}
                 </div>
             </div>
-
+    <!-- Completed Tasks Section -->
             <div class="task-section">
                 <div class="section-header">
                     <h2 class="section-title">Completed Tasks</h2>
@@ -440,36 +440,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-          
+            // Edit task functionality
             document.querySelectorAll('.btn-edit').forEach(button => {
                 button.addEventListener('click', function() {
                     const taskItem = this.closest('.task-item');
                     const editForm = taskItem.querySelector('.edit-form');
                     const taskTitle = taskItem.querySelector('.task-title');
                     
-                  
+                    // Hide the title and show the edit form
                     taskTitle.style.display = 'none';
                     editForm.style.display = 'block';
                 });
             });
 
-   
+            // Cancel edit
             document.querySelectorAll('.btn-cancel').forEach(button => {
                 button.addEventListener('click', function() {
                     const taskItem = this.closest('.task-item');
                     const editForm = taskItem.querySelector('.edit-form');
                     const taskTitle = taskItem.querySelector('.task-title');
                     
-               
+                    // Hide the edit form and show the title
                     editForm.style.display = 'none';
                     taskTitle.style.display = 'block';
                 });
             });
 
-        
+            // Auto-submit checkbox changes
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
-                    
+                    // The checkbox is inside an <a> tag that links to the toggle endpoint
+                    // So we navigate to that URL when the checkbox changes
                     window.location.href = this.closest('.task-checkbox-link').href;
                 });
             });

@@ -15,7 +15,7 @@ app = Flask(__name__)
 # Register teardown function
 app.teardown_appcontext(close_connection)
 
-#since its a sample app, i havent used any filtering logic on db, but rather used it on the app level
+#since its a sample app, i havent used any filtering logic on db, but rather used it on the app level.
 @app.route('/')
 def index():
     all_tasks = get_all_tasks()
@@ -23,10 +23,8 @@ def index():
     # Separate by completion
     due_tasks = [task for task in all_tasks if not task['completed']]
     completed_tasks = [task for task in all_tasks if task['completed']]
-    
-    # Group by category
 
-    
+    #hardcoding for now
     categories = ["Work", "Personal", "Study", "Health", "Other"]
     
     due_by_category = due_tasks
@@ -40,6 +38,7 @@ def index():
         categories=categories
     )
 
+#add tasks
 @app.route("/add", methods=["POST"])
 def add_task_route():
     title = request.form.get("title")
@@ -49,19 +48,19 @@ def add_task_route():
     return redirect(url_for("index"))
 
 
-
+#delete tasks
 @app.route("/delete/<int:task_id>")
 def delete_task_route(task_id):
     delete_task(task_id)
     return redirect(url_for("index"))
 
-
+#set the task completed
 @app.route("/toggle/<int:task_id>")
 def toggle_task_route(task_id):
     toggle_task(task_id)
     return redirect(url_for("index"))
 
-
+#edit tasks
 @app.route("/edit/<int:task_id>", methods=["POST"])
 def edit_task_route(task_id):
     new_title = request.form.get("title")
