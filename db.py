@@ -28,6 +28,7 @@ def init_db(app):
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
+                category TEXT DEFAULT 'General',
                 completed BOOLEAN NOT NULL DEFAULT 0
             )
         """)
@@ -42,9 +43,9 @@ def get_all_tasks():
     return cur.fetchall()
 
 
-def add_task(title):
+def add_task(title, category="General"):
     db = get_db()
-    db.execute("INSERT INTO tasks (title, completed) VALUES (?, ?)", (title, False))
+    db.execute("INSERT INTO tasks (title, category, completed) VALUES (?, ?, ?)", (title, category, False))
     db.commit()
 
 

@@ -15,20 +15,39 @@ app = Flask(__name__)
 # Register teardown function
 app.teardown_appcontext(close_connection)
 
-
-@app.route("/")
+#since its a sample app, i havent used any filtering logic on db, but rather used it on the app level
+@app.route('/')
 def index():
     all_tasks = get_all_tasks()
+    
+    # Separate by completion
     due_tasks = [task for task in all_tasks if not task['completed']]
     completed_tasks = [task for task in all_tasks if task['completed']]
-    return render_template('index.html', due_tasks=due_tasks, completed_tasks=completed_tasks)
+    
+    # Group by category
+
+    
+    categories = ["Work", "Personal", "Study", "Health", "Other"]
+    
+    due_by_category = due_tasks
+    completed_by_category = completed_tasks
+
+    
+    return render_template(
+        'index.html',
+        due_by_category=due_by_category,
+        completed_by_category=completed_by_category,
+        categories=categories
+    )
 
 @app.route("/add", methods=["POST"])
 def add_task_route():
     title = request.form.get("title")
+    category = request.form.get("category") or "General"
     if title:
-        add_task(title)
+        add_task(title, category)
     return redirect(url_for("index"))
+
 
 
 @app.route("/delete/<int:task_id>")

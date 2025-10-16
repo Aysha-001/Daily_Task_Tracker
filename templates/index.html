@@ -1,210 +1,479 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Daily Task Tracker</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
     <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f6f8;
-        margin: 0;
-        padding: 0;
-      }
+        /* Your existing CSS here */
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
 
-      .container {
-        max-width: 600px;
-        margin: 60px auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-      h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 30px;
-      }
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
 
-      h2 {
-        color: #444;
-        border-bottom: 2px solid #0078d7;
-        padding-bottom: 5px;
-        margin-top: 30px;
-      }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-      .section {
-        margin-top: 20px;
-      }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
 
-      form.add-form {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 
-      form.add-form input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-      }
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
 
-      form.add-form button {
-        margin-left: 10px;
-        background-color: #0078d7;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
+        .add-task-form {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
 
-      form.add-form button:hover {
-        background-color: #005ea3;
-      }
+        .form-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
 
-      ul {
-        list-style: none;
-        padding: 0;
-      }
+        .form-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
 
-      li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-      }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
 
-      .completed {
-        text-decoration: line-through;
-        color: gray;
-      }
+        .form-select {
+            flex: 0 0 180px;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+        }
 
-      .actions {
-        display: flex;
-        gap: 8px;
-      }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-      .btn {
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 1.1rem;
-        transition: 0.2s;
-      }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
 
-      .btn:hover {
-        transform: scale(1.2);
-      }
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
 
-      .btn-edit {
-        color: #f39c12;
-      }
+        .task-lists {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
 
-      .btn-delete {
-        color: #e74c3c;
-      }
+        @media (max-width: 768px) {
+            .task-lists {
+                grid-template-columns: 1fr;
+            }
+        }
 
-      .btn-toggle {
-        color: #2ecc71;
-      }
+        .task-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
-      .btn-undo {
-        color: #0078d7;
-      }
+        .section-header {
+            padding: 15px 20px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-      .edit-form {
-        display: flex;
-        gap: 8px;
-        width: 100%;
-      }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
 
-      .edit-form input[type="text"] {
-        flex: 1;
-        padding: 8px;
-        font-size: 0.95rem;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-      }
+        .task-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
 
-      .edit-form button {
-        background-color: #0078d7;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 8px 12px;
-        cursor: pointer;
-      }
+        .task-list {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
 
-      .edit-form button:hover {
-        background-color: #005ea3;
-      }
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .task-category {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: var(--gray-light);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .task-item:hover .task-actions {
+            opacity: 1;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .btn-edit {
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-delete {
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background-color: rgba(247, 37, 133, 0.1);
+        }
+
+        .completed .task-title {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+
+        .completed .task-category {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .btn-success {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #388e3c;
+        }
+
+        .btn-cancel {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-cancel:hover {
+            background-color: #d1d5db;
+        }
+
+        .category-work {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .category-personal {
+            background-color: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .category-study {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .category-health {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .category-other {
+            background-color: #f5f5f5;
+            color: #424242;
+        }
     </style>
-    <script>
-      function enableEdit(id, currentTitle) {
-        const li = document.getElementById("task-" + id);
-        li.innerHTML = `
-          <form class="edit-form" action="/edit/${id}" method="POST">
-            <input type="text" name="title" value="${currentTitle}" required />
-            <button type="submit">Save</button>
-          </form>
-        `;
-      }
-    </script>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h1>🗓️ Daily Task Tracker</h1>
+        <header>
+            <h1>Task Manager</h1>
+            <p class="subtitle">Organize your tasks efficiently</p>
+        </header>
 
-      <!-- Add Task -->
-      <form class="add-form" action="/add" method="POST">
-        <input type="text" name="title" placeholder="Add a new task..." required />
-        <button type="submit">Add</button>
-      </form>
+        <section class="add-task-form">
+            <form action="/add" method="POST">
+                <div class="form-group">
+                    <input type="text" name="title" class="form-input" placeholder="What needs to be done?" required>
+                    <select name="category" class="form-select">
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Study">Study</option>
+                        <option value="Health">Health</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+            </form>
+        </section>
 
-      <!-- Due Tasks -->
-      <div class="section">
-        <h2>⏳ Due Tasks</h2>
-        {% if due_tasks %}
-        <ul>
-          {% for task in due_tasks %}
-          <li id="task-{{ task.id }}">
-            <span>{{ task.title }}</span>
-            <div class="actions">
-              <a href="/toggle/{{ task.id }}" class="btn btn-toggle" title="Mark complete">✔️</a>
-              <button class="btn btn-edit" onclick="enableEdit({{ task.id }}, '{{ task.title }}')" type="button">✏️</button>
-              <a href="/delete/{{ task.id }}" class="btn btn-delete" title="Delete">🗑️</a>
+        <section class="task-lists">
+            <div class="task-section">
+                <div class="section-header">
+                    <h2 class="section-title">Due Tasks</h2>
+                    <span class="task-count">{{ due_by_category|length }} task{% if due_by_category|length != 1 %}s{% endif %}</span>
+                </div>
+                <div class="task-list" id="due-tasks">
+                    {% if due_by_category %}
+                        {% for task in due_by_category %}
+                        <div class="task-item" data-id="{{ task.id }}">
+                            <a href="/toggle/{{ task.id }}" class="task-checkbox-link">
+                                <input type="checkbox" class="task-checkbox">
+                            </a>
+                            <div class="task-content">
+                                <div class="task-title">{{ task.title }}</div>
+                                <span class="task-category category-{{ task.category|lower }}">{{ task.category }}</span>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn-icon btn-edit" title="Edit task">✏️</button>
+                                <a href="/delete/{{ task.id }}" class="btn-icon btn-delete" title="Delete task" onclick="return confirm('Are you sure you want to delete this task?')">🗑️</a>
+                            </div>
+                            <div class="edit-form">
+                                <form action="/edit/{{ task.id }}" method="POST">
+                                    <input type="text" class="edit-input" name="title" value="{{ task.title }}" required>
+                                    <div class="edit-actions">
+                                        <button type="submit" class="btn btn-small btn-success">Save</button>
+                                        <button type="button" class="btn btn-small btn-cancel">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">📝</div>
+                            <p>No tasks due. Add a new task above!</p>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>No due tasks 🎉</p>
-        {% endif %}
-      </div>
 
-      <!-- Completed Tasks -->
-      <div class="section">
-        <h2>✅ Completed Tasks</h2>
-        {% if completed_tasks %}
-        <ul>
-          {% for task in completed_tasks %}
-          <li id="task-{{ task.id }}">
-            <span class="completed">{{ task.title }}</span>
-            <div class="actions">
-              <a href="/toggle/{{ task.id }}" class="btn btn-undo" title="Mark as not done">↩️</a>
-              <a href="/delete/{{ task.id }}" class="btn btn-delete" title="Delete">🗑️</a>
+            <div class="task-section">
+                <div class="section-header">
+                    <h2 class="section-title">Completed Tasks</h2>
+                    <span class="task-count">{{ completed_by_category|length }} task{% if completed_by_category|length != 1 %}s{% endif %}</span>
+                </div>
+                <div class="task-list" id="completed-tasks">
+                    {% if completed_by_category %}
+                        {% for task in completed_by_category %}
+                        <div class="task-item completed" data-id="{{ task.id }}">
+                            <a href="/toggle/{{ task.id }}" class="task-checkbox-link">
+                                <input type="checkbox" class="task-checkbox" checked>
+                            </a>
+                            <div class="task-content">
+                                <div class="task-title">{{ task.title }}</div>
+                                <span class="task-category category-{{ task.category|lower }}">{{ task.category }}</span>
+                            </div>
+                            <div class="task-actions">
+                                <button class="btn-icon btn-edit" title="Edit task">✏️</button>
+                                <a href="/delete/{{ task.id }}" class="btn-icon btn-delete" title="Delete task" onclick="return confirm('Are you sure you want to delete this task?')">🗑️</a>
+                            </div>
+                            <div class="edit-form">
+                                <form action="/edit/{{ task.id }}" method="POST">
+                                    <input type="text" class="edit-input" name="title" value="{{ task.title }}" required>
+                                    <div class="edit-actions">
+                                        <button type="submit" class="btn btn-small btn-success">Save</button>
+                                        <button type="button" class="btn btn-small btn-cancel">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">✅</div>
+                            <p>No completed tasks yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p>No completed tasks yet</p>
-        {% endif %}
-      </div>
+        </section>
     </div>
-  </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          
+            document.querySelectorAll('.btn-edit').forEach(button => {
+                button.addEventListener('click', function() {
+                    const taskItem = this.closest('.task-item');
+                    const editForm = taskItem.querySelector('.edit-form');
+                    const taskTitle = taskItem.querySelector('.task-title');
+                    
+                  
+                    taskTitle.style.display = 'none';
+                    editForm.style.display = 'block';
+                });
+            });
+
+   
+            document.querySelectorAll('.btn-cancel').forEach(button => {
+                button.addEventListener('click', function() {
+                    const taskItem = this.closest('.task-item');
+                    const editForm = taskItem.querySelector('.edit-form');
+                    const taskTitle = taskItem.querySelector('.task-title');
+                    
+               
+                    editForm.style.display = 'none';
+                    taskTitle.style.display = 'block';
+                });
+            });
+
+        
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    
+                    window.location.href = this.closest('.task-checkbox-link').href;
+                });
+            });
+        });
+    </script>
+</body>
 </html>
