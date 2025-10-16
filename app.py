@@ -38,6 +38,25 @@ def index():
         categories=categories
     )
 
+#filtering
+@app.route('/filter/<category>')
+def filter_tasks(category):
+    all_tasks = get_all_tasks()
+    
+    # Filter tasks by category
+    filtered_due_tasks = [task for task in all_tasks if not task['completed'] and task['category'] == category]
+    filtered_completed_tasks = [task for task in all_tasks if task['completed'] and task['category'] == category]
+    
+    categories = ["Work", "Personal", "Study", "Health", "Other"]
+    
+    return render_template(
+        'index.html',
+        due_by_category=filtered_due_tasks,
+        completed_by_category=filtered_completed_tasks,
+        categories=categories,
+        active_filter=category  # Pass the active filter to template
+    )
+
 #add tasks
 @app.route("/add", methods=["POST"])
 def add_task_route():
