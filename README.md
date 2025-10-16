@@ -36,3 +36,5 @@ python app.py
 Open your web browser and navigate to:
 
 http://localhost:5000
+
+hosted link : https://alan1234567.pythonanywhere.com/
