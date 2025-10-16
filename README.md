@@ -1,4 +1,4 @@
-# Todo List Application - Setup Guide
+# Daily Task Tracker - Setup Guide
 
 Prerequisites
  - Python 3.7 or higher
@@ -38,3 +38,13 @@ Open your web browser and navigate to:
 http://localhost:5000
 
 hosted link : https://alan1234567.pythonanywhere.com/
+
+site is hosted on **pythonanywhere** 
+
+### Additional things added are :
+1) Introduced database (sqlite)
+2) Added category feature for easier organisation of tasks
+3) Filtering on category
+4) seperating tasks such as those of completed and due for better user experience.
+
+note : UI is made stylish using AI.
